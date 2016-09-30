@@ -1,5 +1,5 @@
 import numpy as np #for median and mean
-from scipy import stats #for mode
+from scipy import stats #for calculating mode
 
 def mmm(x):
     return np.mean(x) #calculates mean
