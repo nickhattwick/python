@@ -11,18 +11,18 @@ addlands(Deck)
 
 Deck.extend((2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,5,5,6))
 
+
+class player:
+    life = 20
+    deck = Deck
+    field = []
+    hand = []
+    graveyard = []
+
+    def __init__(self, name):
+        self.name = name
+
 def Game():
-    class player:
-        life = 20
-        deck = Deck
-        field = []
-        hand = []
-        graveyard = []
-
-        def __init__(self, name):
-            self.name = name
-
-
     P1 = player('Player 1')
     P2 = player('Player 2')
 
