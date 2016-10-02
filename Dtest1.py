@@ -30,7 +30,7 @@ def Game():
     random.shuffle(P1.deck)
     random.shuffle(P2.deck)
 
-    for i in 7:
+    for i in range(7):
         x = P1.deck.pop()
         P1.hand.extend(x)
         y = P2.deck.pop()
