@@ -13,14 +13,14 @@ Deck.extend((2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,5,5,6))
 
 
 class player:
-    life = 20
-    deck = Deck
-    field = []
-    hand = []
-    graveyard = []
-
     def __init__(self, name):
         self.name = name
+        self.life = 20
+        self.deck = Deck
+        self.field = []
+        self.hand = []
+        self.pile = []
+
 
 def Game():
     P1 = player('Player 1')
@@ -30,11 +30,10 @@ def Game():
     random.shuffle(P1.deck)
     random.shuffle(P2.deck)
 
-    for i in range(7):
-        x = P1.deck.pop()
-        P1.hand.extend(x)
-        y = P2.deck.pop()
-        P2.hand.extend(y)
+    x = P1.deck[0,7]
+    P1.hand.extend(x)
+    y = P2.deck[0,7]
+    P2.hand.extend(y)
 
     print P1.hand
 
