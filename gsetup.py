@@ -1,3 +1,4 @@
+import collections
 from random import shuffle
 from random import choice
 
@@ -19,7 +20,7 @@ class player:
         self.hand = []
         self.field = []
         self.dpile = []
-        self.deck = Deck
+        self.deck = collections.deque(Deck)
 
     def draw(self):
         x = self.deck.pop()

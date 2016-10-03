@@ -1,4 +1,6 @@
+import collections
 from random import shuffle
+from random import choice
 
 Deck = []
 def addlands(xli):
@@ -18,7 +20,11 @@ class player:
         self.hand = []
         self.field = []
         self.dpile = []
-        self.deck = Deck
+        self.deck = collections.deque(Deck)
+
+    def draw(self):
+        x = self.deck.pop()
+        self.hand.append(x)
 
 p1 = player('P1')
 p2 = player('P2')
@@ -29,9 +35,8 @@ for p in players:
     p.count = 0
     shuffle(p.deck)
     while (p.count < 7):
-        x = p.deck.pop()
-        p.hand.append(x)
+        p.draw()
         p.count += 1
 
-print p1.hand
-print p2.hand
+print "P1: ", p1.hand
+print "P2: ", p2.hand
