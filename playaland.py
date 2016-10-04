@@ -56,4 +56,5 @@ def plturn():
 
 plturn()
 
+print p1.hand
 print p1.lands
