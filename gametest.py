@@ -37,15 +37,27 @@ for p in players:
         p.draw()
         p.count += 1
 
+def block():
+    pass
+
+def attack():
+    x = raw_input("Which creature would you like to attack with?\n")
+    if attacker in possible:
+        print attacker
+        block()
+        y = possible.index(x)
+        possible = possible.pop(y)
+        choice = raw_input("Would you like to attack with another monster?\nY or N")
 
 def plturn():
-    mana = len(p1.lands)
     global mana
+    mana = len(p1.lands)
+
     print "Hand: ", p1.hand
     print "Field: ", p1.field
     print "Mana: ", mana
     def prompt():
-        choice = raw_input("It's your turn. What will you do? \n LAND SUMMON ATTACK HELP\n")
+        choice = raw_input("It's your turn. What will you do? \n LAND SUMMON ATTACK DONE\n")
         if choice.upper() == "LAND":
             x = 0
             while x < len(p1.hand):
@@ -58,6 +70,7 @@ def plturn():
                     break
                 else:
                     x+=1
+                    print "No lands left"
             prompt()
         elif choice.upper() == "SUMMON":
             mhand = [x for x in p1.hand if x != "l"]
@@ -80,17 +93,40 @@ def plturn():
 
         elif choice.upper() == "ATTACK":
             possible = p1.field
-            attacker = raw_input("Which creatures would you like to attack with?")
+            print possible
+            x = raw_input("Which creature would you like to attack with?\n")
             if attacker in possible:
                 print attacker
+                block()
+                y = possible.index(x)
+                possible = possible.pop(y)
+
+                def secondchoice():
+                    choice = raw_input("Would you like to attack with another monster?\nY or N")
+                    if choice.upper() == Y:
+                        attack()
+                    elif choice.upper() == N:
+                        prompt()
+                secondchoice()
             elif attacker in p1.field:
                 print "You can't attack with that"
             else:
                 print "That's not even a thing"
 
+        elif choice.upper() == "DONE":
+            print "Turn End.\n Opponent's Turn"
+            opturn()
+
+        elif choice.upper() == "QUIT":
+            exit()
+
         else:
-            print "..."
+            print "That's not even a thing"
+            prompt()
 
     prompt()
+
+def opturn():
+    print "Success"
 
 plturn()
