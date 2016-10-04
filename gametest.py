@@ -37,15 +37,14 @@ for p in players:
         p.draw()
         p.count += 1
 
-print "P1: ", p1.hand
 
 def plturn():
     mana = len(p1.lands)
+    global mana
     print "Hand: ", p1.hand
     print "Field: ", p1.field
     print "Mana: ", mana
     def prompt():
-        mana = len(p1.lands)
         choice = raw_input("It's your turn. What will you do? \n LAND SUMMON ATTACK HELP\n")
         if choice.upper() == "LAND":
             x = 0
@@ -62,18 +61,33 @@ def plturn():
             prompt()
         elif choice.upper() == "SUMMON":
             mhand = [x for x in p1.hand if x != "l"]
-            mana = len(p1.hand)
+            mana = len(p1.lands)
             print "Monsters: ", mhand
             mchoice = raw_input("Which monster would you like to summon?\n")
-            if int(mchoice) <= mana:
-                y = p1.hand.index(mchoice)
-                z = p1.hand.pop(y)
-                p1.field.append(z)
-                print p1.field
+            try:
+                if int(mchoice) <= mana:
+                    y = p1.hand.index(mchoice)
+                    z = p1.hand.pop(y)
+                    p1.field.append(z)
+                    print p1.field
+                    prompt()
+                else:
+                    print "You can only play monsters less than or equal to your mana"
+                    prompt()
+            except:
+                print "That's not a card in your hand"
                 prompt()
+
+        elif choice.upper() == "ATTACK":
+            possible = p1.field
+            attacker = raw_input("Which creatures would you like to attack with?")
+            if attacker in possible:
+                print attacker
+            elif attacker in p1.field:
+                print "You can't attack with that"
             else:
-                print "You can only play monsters less than your mana"
-                prompt()
+                print "That's not even a thing"
+
         else:
             print "..."
 

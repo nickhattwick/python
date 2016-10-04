@@ -61,16 +61,21 @@ def plturn():
             prompt()
         elif choice.upper() == "SUMMON":
             mhand = [x for x in p1.hand if x != "l"]
+            mana = len(p1.lands)
             print "Monsters: ", mhand
             mchoice = raw_input("Which monster would you like to summon?\n")
-            if int(mchoice) <= mana:
-                y = p1.hand.index(mchoice)
-                z = p1.hand.pop(y)
-                p1.field.append(z)
-                print p1.field
-                prompt()
-            else:
-                print "You can only play monsters less than or equal to your mana"
+            try:
+                if int(mchoice) <= mana:
+                    y = p1.hand.index(mchoice)
+                    z = p1.hand.pop(y)
+                    p1.field.append(z)
+                    print p1.field
+                    prompt()
+                else:
+                    print "You can only play monsters less than or equal to your mana"
+                    prompt()
+            except:
+                print "That's not a card in your hand"
                 prompt()
         else:
             print "..."
