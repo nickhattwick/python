@@ -41,7 +41,7 @@ print "P1: ", p1.hand
 
 def plturn():
     choice = raw_input("It's your turn. What will you do? \n LAND SUMMON ATTACK HELP\n")
-    if choice == "LAND":
+    if choice.upper() == "LAND":
         x = 0
         while x < len(p1.hand):
             if p1.hand[x] == "l":
