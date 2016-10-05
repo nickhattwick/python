@@ -126,10 +126,41 @@ def secatkchoice():
         print "That's not a thing..."
         secatkchoice()
 
+def opland():
+    x = 0
+    while x < len(p1.hand):
+        if p2.hand[x] == "l":
+            print "x: ", x
+            y = p2.hand.pop(x)
+            p2.lands.append(y)
+            opmana = len(p2.lands)
+            print "OP has ", opmana, " lands"
+
+        else:
+            x+=1
+    opsummon()
+
+def opsummon():
+    mhand = [x for x in p2.hand if x != "l"]
+    opmana = len(p2.lands)
+    rhand = sorted(mhand, reverse=True)
+    x = 0
+    while x < len(rhand):
+        if int(rhand[x]) <= opmana:
+        #PICK UP HERE
+
+    mchoice = max(mhand)
+
+    y = p2.hand.index(mchoice)
+    z = p2.hand.pop(y)
+    p2.field.append(z)
+    Print "OP summons "
+    print "OP's field: ", p2.field
+
 def plturn():
     global mana
     mana = len(p1.lands)
-
+    p1.draw()
     print "Hand: ", p1.hand
     print "Field: ", p1.field
     print "Mana: ", mana
@@ -137,6 +168,9 @@ def plturn():
     prompt()
 
 def opturn():
-    print "Success"
+    print "Opponent's Turn"
+    p2.draw()
+    print "OP has ", len(p2.hand), " cards in hand"
+
 
 plturn()
