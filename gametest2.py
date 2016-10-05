@@ -118,9 +118,9 @@ def attack():
 
 def secatkchoice():
     choice = raw_input("Would you like to attack with another monster?\nY or N")
-    if choice.upper() == "Y":
+    if choice.upper() == "Y\n":
         attack()
-    elif choice.upper() == "N":
+    elif choice.upper() == "N\n":
         prompt()
     else:
         print "That's not a thing..."
@@ -135,27 +135,36 @@ def opland():
             p2.lands.append(y)
             opmana = len(p2.lands)
             print "OP has ", opmana, " lands"
-
+            break
         else:
             x+=1
     opsummon()
 
 def opsummon():
+    print "in summon phase test"
+    ms = p2.field
     mhand = [x for x in p2.hand if x != "l"]
     opmana = len(p2.lands)
     rhand = sorted(mhand, reverse=True)
     x = 0
-    while x < len(rhand):
+    while x < len(rhand) and opmana > 0:
         if int(rhand[x]) <= opmana:
-        #PICK UP HERE
+            a = rhand[x]
+            b = p2.hand.index(a)
+            c = p2.hand.pop(b)
+            rhand.pop(x)
+            print "OP summons ", a
+            p2.field.append(c)
+            opmana = opmana - int(a)
+        else:
+            x = x + 1
 
-    mchoice = max(mhand)
-
-    y = p2.hand.index(mchoice)
-    z = p2.hand.pop(y)
-    p2.field.append(z)
-    Print "OP summons "
     print "OP's field: ", p2.field
+    if not ms:
+        print "End of OP's turn"
+        plturn()
+    else:
+        print "Attack test is go"
 
 def plturn():
     global mana
@@ -171,6 +180,7 @@ def opturn():
     print "Opponent's Turn"
     p2.draw()
     print "OP has ", len(p2.hand), " cards in hand"
+    opland()
 
 
 plturn()
