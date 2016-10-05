@@ -46,8 +46,9 @@ def prompt():
         summon()
     elif choice.upper() == "ATTACK":
         attack()
-    elif choice.upper() == "DONE":        
+    elif choice.upper() == "DONE":
         print "Turn End.\n Opponent's Turn"
+        p1.blockers = list(p1.field)
         opturn()
 
     elif choice.upper() == "QUIT":
@@ -81,6 +82,7 @@ def summon():
         y = p1.hand.index(mchoice)
         z = p1.hand.pop(y)
         p1.field.append(z)
+        p1.blockers.append(z)
         print p1.field
         prompt()
     elif mchoice in p1.hand:
@@ -94,11 +96,11 @@ def block():
     print "Block-test: Success"
 
 def attack():
-    p1.blockers = p1.field
+    p1.blockers = list(p1.field)
     print p1.blockers
     if not p1.blockers:
         print "there's nothing there"
-        prompt()
+        opturn()
     else:
         x = raw_input("Which creature would you like to attack with?\n")
         if str(x) in p1.blockers:
@@ -121,7 +123,7 @@ def secatkchoice():
     if choice.upper() == "Y":
         attack()
     elif choice.upper() == "N":
-        prompt()
+        opturn()
     else:
         print "That's not a thing..."
         secatkchoice()
@@ -150,7 +152,7 @@ def whoblocks():
                 g = p1.field.pop(h)
                 p1.dpile.append(g)
                 print "It's a draw, both creatures were destroyed"
-            x = x + 1
+
         elif y in p1.field:
             print "You can't block with that"
             whoblocks()
@@ -160,7 +162,7 @@ def whoblocks():
     elif choice.upper() == "N":
         p1.life = p1.life - int(ms[x])
         print "LP: ", p1.life
-        x = x + 1
+
 
     else:
         print "That's not even a thing"
@@ -184,7 +186,7 @@ def opsummon():
     print "in summon phase test"
     ms = p2.field
     global ms
-    mhand = [k for k in p2.hand if x != "l"]
+    mhand = [x for x in p2.hand if x != "l"]
     opmana = len(p2.lands)
     rhand = sorted(mhand, reverse=True)
     x = 0
@@ -215,11 +217,12 @@ def opsummon():
                 x = x + 1
             else:
                 whoblocks()
+                x = x + 1
 
 def plturn():
     global mana
     mana = len(p1.lands)
-    p1.blockers = p1.field
+    p1.blockers = list(p1.field)
     p1.draw()
     print "Hand: ", p1.hand
     print "Field: ", p1.field

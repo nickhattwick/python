@@ -1,5 +1,4 @@
 lst = ["1","2","3","4"]
-y = raw_input("pick a number\n")
-x = lst.index(y)
-
-print x
+y = list(lst)
+y.append("5")
+print lst
