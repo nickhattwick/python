@@ -17,6 +17,7 @@ class player:
         self.life = 20
         self.hand = []
         self.field = []
+        self.blockers = []
         self.lands = []
         self.dpile = []
         self.deck = Deck
@@ -45,7 +46,7 @@ def prompt():
         summon()
     elif choice.upper() == "ATTACK":
         attack()
-    elif choice.upper() == "DONE":
+    elif choice.upper() == "DONE":        
         print "Turn End.\n Opponent's Turn"
         opturn()
 
@@ -93,23 +94,22 @@ def block():
     print "Block-test: Success"
 
 def attack():
-    global possible
-    possible = p1.field
-    print possible
-    if not possible:
+    p1.blockers = p1.field
+    print p1.blockers
+    if not p1.blockers:
         print "there's nothing there"
         prompt()
     else:
         x = raw_input("Which creature would you like to attack with?\n")
-        if str(x) in possible:
+        if str(x) in p1.blockers:
             block()
-            y = possible.index(x)
-            possible = possible.pop(y)
+            y = p1.blockers.index(x)
+            p1.blockers = p1.blockers.pop(y)
             secatkchoice()
         elif x in p1.field:
             print "You can't attack with that"
             prompt()
-        elif not possible:
+        elif not p1.blockers:
             print "There's nothing there"
             prompt()
         else:
@@ -117,14 +117,54 @@ def attack():
             prompt()
 
 def secatkchoice():
-    choice = raw_input("Would you like to attack with another monster?\nY or N")
-    if choice.upper() == "Y\n":
+    choice = raw_input("Would you like to attack with another monster?\nY or N\n")
+    if choice.upper() == "Y":
         attack()
-    elif choice.upper() == "N\n":
+    elif choice.upper() == "N":
         prompt()
     else:
         print "That's not a thing..."
         secatkchoice()
+
+def whoblocks():
+    choice = raw_input("Will you block? Y or N\n")
+    if choice.upper() == "Y":
+        print p1.blockers
+        y = raw_input("Who will you block with?\n")
+        if y in p1.blockers:
+            if y > ms[x]:
+                z = p2.field.index(ms[x])
+                c = p2.field.pop(z)
+                p2.dpile.append(c)
+                print "OP's ", ms[x], " was destroyed"
+            elif ms[x] > y:
+                z = p1.field.index(y)
+                c = p1.field.pop(z)
+                p1.dpile.append(c)
+                print "Your ", y, " was destroyed"
+            else:
+                z = p2.field.index(ms[x])
+                c = p2.field.pop(z)
+                p2.dpile.append(c)
+                h = p1.field.index(y)
+                g = p1.field.pop(h)
+                p1.dpile.append(g)
+                print "It's a draw, both creatures were destroyed"
+            x = x + 1
+        elif y in p1.field:
+            print "You can't block with that"
+            whoblocks()
+        else:
+            print "That's not even a thing"
+            whoblocks()
+    elif choice.upper() == "N":
+        p1.life = p1.life - int(ms[x])
+        print "LP: ", p1.life
+        x = x + 1
+
+    else:
+        print "That's not even a thing"
+        whoblocks()
 
 def opland():
     x = 0
@@ -143,7 +183,8 @@ def opland():
 def opsummon():
     print "in summon phase test"
     ms = p2.field
-    mhand = [x for x in p2.hand if x != "l"]
+    global ms
+    mhand = [k for k in p2.hand if x != "l"]
     opmana = len(p2.lands)
     rhand = sorted(mhand, reverse=True)
     x = 0
@@ -164,11 +205,21 @@ def opsummon():
         print "End of OP's turn"
         plturn()
     else:
-        print "Attack test is go"
+        print "Attack Phase"
+        x = 0
+        while x < len(ms):
+            print "A", ms[x], "is attacking you."
+            if not p1.blockers:
+                p1.life = p1.life - int(ms[x])
+                print "LP: ", p1.life
+                x = x + 1
+            else:
+                whoblocks()
 
 def plturn():
     global mana
     mana = len(p1.lands)
+    p1.blockers = p1.field
     p1.draw()
     print "Hand: ", p1.hand
     print "Field: ", p1.field

@@ -1,4 +1,5 @@
 lst = ["1","2","3","4"]
-x = sorted(lst, reverse=True)
-if int(x[0]) == 4:
-    print "Yup"
+y = raw_input("pick a number\n")
+x = lst.index(y)
+
+print x
