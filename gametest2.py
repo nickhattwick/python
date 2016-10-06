@@ -93,7 +93,8 @@ def summon():
         prompt()
 
 def block():
-    print "Block-test: Success"
+    print "block is go"
+
 
 def attack():
     print p1.blockers
@@ -130,10 +131,10 @@ def secatkchoice():
 def whoblocks():
     print "Attack Phase"
     x = 0
-    while x < len(ms):
-        print "A", ms[x], "is attacking you."
+    while x < len(p2.blockers):
+        print "A", p2.blockers[x], "is attacking you."
         if not p1.blockers:
-            p1.life = p1.life - int(ms[x])
+            p1.life = p1.life - int(p2.blockers[x])
             print "LP: ", p1.life
             if p1.life <= 0:
                 print "Game Over"
@@ -146,24 +147,25 @@ def whoblocks():
                 print p1.blockers
                 y = raw_input("Who will you block with?\n")
                 if y in p1.blockers:
-                    if y > ms[x]:
-                        z = p2.field.index(ms[x])
+                    if y > p2.blockers[x]:
+                        z = p2.field.index(p2.blockers[x])
                         c = p2.field.pop(z)
                         p2.dpile.append(c)
                         print "OP's monster was destroyed"
-                    elif ms[x] > y:
+                    elif p2.blockers[x] > y:
                         z = p1.field.index(y)
                         c = p1.field.pop(z)
                         p1.dpile.append(c)
                         print "Your ", y, " was destroyed"
                     else:
-                        z = p2.field.index(ms[x])
+                        z = p2.field.index(p2.blockers[x])
                         c = p2.field.pop(z)
                         p2.dpile.append(c)
                         h = p1.field.index(y)
                         g = p1.field.pop(h)
                         p1.dpile.append(g)
                         print "It's a draw, both creatures were destroyed"
+                    x = x + 1
 
                 elif y in p1.field:
                     print "You can't block with that"
@@ -172,18 +174,17 @@ def whoblocks():
                     print "That's not even a thing"
                     whoblocks()
             elif choice.upper() == "N":
-                p1.life = p1.life - int(ms[x])
+                p1.life = p1.life - int(p2.blockers[x])
                 print "LP: ", p1.life
                 if p1.life <= 0:
                     print "Game Over"
                     exit()
                 else:
-                    break
+                    x = x + 1
 
             else:
                 print "That's not even a thing"
                 whoblocks()
-            x = x + 1
 
 
 def opland():
@@ -202,8 +203,6 @@ def opland():
 
 def opsummon():
     print "in summon phase test"
-    ms = p2.field
-    global ms
     mhand = [x for x in p2.hand if x != "l"]
     opmana = len(p2.lands)
     rhand = sorted(mhand, reverse=True)
@@ -221,7 +220,8 @@ def opsummon():
             x = x + 1
 
     print "OP's field: ", p2.field
-    if not ms:
+    p2.blockers = list(p2.field)
+    if not p2.blockers:
         print "End of OP's turn"
         plturn()
     else:
@@ -229,10 +229,9 @@ def opsummon():
 
 
 def plturn():
-    global mana
+    p1.draw()
     mana = len(p1.lands)
     p1.blockers = list(p1.field)
-    p1.draw()
     print "Hand: ", p1.hand
     print "Field: ", p1.field
     print "Mana: ", mana
@@ -244,6 +243,5 @@ def opturn():
     p2.draw()
     print "OP has ", len(p2.hand), " cards in hand"
     opland()
-
 
 plturn()
