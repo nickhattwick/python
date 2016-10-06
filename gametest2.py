@@ -94,7 +94,8 @@ def summon():
 
 def block():
     if not p2.blockers:
-        p2.life = p2.life - atk
+        p2.life = p2.life - int(atk)
+        print "OP LP: ", p2.life
     elif max(p2.blockers >= atk):
         blk = [x for x in p2.blockers if x >= atk]
         if min(blk) > atk:
@@ -107,11 +108,11 @@ def block():
             p1.field.pop(d)
             p1.dpile.append(atk)
             print "Opponent blocked with ", blk, ". Your ", atk, "was destroyed."
-        elif min(blk) = atk:
+        else:
             blist = sorted(p2.blockers)
             x = 0
             while x < len(blist):
-                if blist[x] > atk:
+                if blist[x] >= atk:
                     a = blist[x]
                     b = p2.blockers.index(a)
                     p2.blockers.pop(b)
@@ -124,8 +125,19 @@ def block():
                     break
                 else:
                     x = x + 1
+    elif atk > p2.life:
+        bmin = min(p2.blockers)
+        x = p2.blockers.index(bmin)
+        a = p2.field.index(bmin)
+        y = p2.field.pop(a)
+        p2.blockers.pop(x)
+        p2.dpile.append(y)
+        print "OP blocked with ", bmin
+        print "OP's ", bmin, " was destroyed"
 
-
+    else:
+        p2.life = p2.life - int(atk)
+        print "OP LP: ", p2.life
 
 def attack():
     if not p1.blockers:
@@ -134,6 +146,7 @@ def attack():
     else:
         print "Your Attackers: ", p1.blockers
         print "OP's Blockers: ", p2.blockers
+        global atk
         atk = raw_input("Which creature would you like to attack with?\n")
         if str(atk) in p1.blockers:
             block()
