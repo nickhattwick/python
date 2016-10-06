@@ -113,14 +113,14 @@ def block():
         blk = [x for x in p2.blockers if x >= atk]
         if min(blk) > atk:
             a = min(blk)
-            b = p2.blockers.index(a)
-            p2.blockers.pop(b)
             c = p1.blockers.index(atk)
             d = p1.field.index(atk)
             p1.blockers.pop(c)
             p1.field.pop(d)
+            b = p2.blockers.index(a)
+            p2.blockers.pop(b)
             p1.dpile.append(atk)
-            print "Opponent blocked with ", blk, ". Your ", atk, "was destroyed."
+            print "Opponent blocked with ", a, ". Your ", atk, "was destroyed."
         else:
             blist = sorted(p2.blockers)
             x = 0
@@ -134,7 +134,7 @@ def block():
                     p1.blockers.pop(c)
                     p1.field.pop(d)
                     p1.dpile.append(atk)
-                    print "Opponent blocked with ", a, ". Your ", atk, "was destroyed."
+                    print "Opponent blocked with ", a, ". Both were destroyed."
                     break
                 else:
                     x = x + 1
@@ -165,9 +165,9 @@ def attack():
         global atk
         atk = raw_input("Which creature would you like to attack with?\n")
         if str(atk) in p1.blockers:
-            block()
             y = p1.blockers.index(atk)
             p1.blockers.pop(y)
+            block()
             secatkchoice()
         elif atk in p1.field:
             print "You can't attack with that"
@@ -209,19 +209,21 @@ def whoblocks():
                 print p1.blockers
                 y = raw_input("Who will you block with?\n")
                 if y in p1.blockers:
+                    yi = int(y)
                     if y > p2.blockers[x]:
-                        z = p2.field.index(p2.blockers[x])
-                        c = p2.field.pop(z)
                         a = p1.blockers.index(y)
                         p1.blockers.pop(a)
+                        z = p2.field.index(p2.blockers[x])
                         p2.blockers.pop(x)
+                        c = p2.field.pop(z)
                         p2.dpile.append(c)
                         print "OP's monster was destroyed"
                     elif p2.blockers[x] > y:
+                        a = p1.blockers.index(y)
+                        p1.blockers.pop(a)
+                        p2.blockers.pop(x)
                         z = p1.field.index(y)
                         c = p1.field.pop(z)
-                        p1.blockers.pop(y)
-                        p2.blockers.pop(x)
                         p1.dpile.append(c)
                         print "Your ", y, " was destroyed"
                     else:
@@ -229,8 +231,9 @@ def whoblocks():
                         c = p2.field.pop(z)
                         p2.dpile.append(c)
                         h = p1.field.index(y)
+                        j = p1.blockers.index(y)
+                        p1.blockers.pop(j)
                         g = p1.field.pop(h)
-                        p1.blockers.pop(y)
                         p2.blockers.pop(x)
                         p1.dpile.append(g)
                         print "It's a draw, both creatures were destroyed"
