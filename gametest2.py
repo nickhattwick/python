@@ -93,22 +93,54 @@ def summon():
         prompt()
 
 def block():
-    print "block is go"
+    if not p2.blockers:
+        p2.life = p2.life - atk
+    elif max(p2.blockers >= atk):
+        blk = [x for x in p2.blockers if x >= atk]
+        if min(blk) > atk:
+            a = min(blk)
+            b = p2.blockers.index(a)
+            p2.blockers.pop(b)
+            c = p1.blockers.index(atk)
+            d = p1.field.index(atk)
+            p1.blockers.pop(c)
+            p1.field.pop(d)
+            p1.dpile.append(atk)
+            print "Opponent blocked with ", blk, ". Your ", atk, "was destroyed."
+        elif min(blk) = atk:
+            blist = sorted(p2.blockers)
+            x = 0
+            while x < len(blist):
+                if blist[x] > atk:
+                    a = blist[x]
+                    b = p2.blockers.index(a)
+                    p2.blockers.pop(b)
+                    c = p1.blockers.index(atk)
+                    d = p1.field.index(atk)
+                    p1.blockers.pop(c)
+                    p1.field.pop(d)
+                    p1.dpile.append(atk)
+                    print "Opponent blocked with ", a, ". Your ", atk, "was destroyed."
+                    break
+                else:
+                    x = x + 1
+
 
 
 def attack():
-    print p1.blockers
     if not p1.blockers:
         print "there's nothing there"
         opturn()
     else:
-        x = raw_input("Which creature would you like to attack with?\n")
-        if str(x) in p1.blockers:
+        print "Your Attackers: ", p1.blockers
+        print "OP's Blockers: ", p2.blockers
+        atk = raw_input("Which creature would you like to attack with?\n")
+        if str(atk) in p1.blockers:
             block()
-            y = p1.blockers.index(x)
+            y = p1.blockers.index(atk)
             p1.blockers.pop(y)
             secatkchoice()
-        elif x in p1.field:
+        elif atk in p1.field:
             print "You can't attack with that"
             prompt()
         elif not p1.blockers:
