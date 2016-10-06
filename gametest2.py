@@ -96,7 +96,6 @@ def block():
     print "Block-test: Success"
 
 def attack():
-    p1.blockers = list(p1.field)
     print p1.blockers
     if not p1.blockers:
         print "there's nothing there"
@@ -106,7 +105,7 @@ def attack():
         if str(x) in p1.blockers:
             block()
             y = p1.blockers.index(x)
-            p1.blockers = p1.blockers.pop(y)
+            p1.blockers.pop(y)
             secatkchoice()
         elif x in p1.field:
             print "You can't attack with that"
@@ -129,44 +128,63 @@ def secatkchoice():
         secatkchoice()
 
 def whoblocks():
-    choice = raw_input("Will you block? Y or N\n")
-    if choice.upper() == "Y":
-        print p1.blockers
-        y = raw_input("Who will you block with?\n")
-        if y in p1.blockers:
-            if y > ms[x]:
-                z = p2.field.index(ms[x])
-                c = p2.field.pop(z)
-                p2.dpile.append(c)
-                print "OP's ", ms[x], " was destroyed"
-            elif ms[x] > y:
-                z = p1.field.index(y)
-                c = p1.field.pop(z)
-                p1.dpile.append(c)
-                print "Your ", y, " was destroyed"
+    print "Attack Phase"
+    x = 0
+    while x < len(ms):
+        print "A", ms[x], "is attacking you."
+        if not p1.blockers:
+            p1.life = p1.life - int(ms[x])
+            print "LP: ", p1.life
+            if p1.life <= 0:
+                print "Game Over"
+                exit()
             else:
-                z = p2.field.index(ms[x])
-                c = p2.field.pop(z)
-                p2.dpile.append(c)
-                h = p1.field.index(y)
-                g = p1.field.pop(h)
-                p1.dpile.append(g)
-                print "It's a draw, both creatures were destroyed"
-
-        elif y in p1.field:
-            print "You can't block with that"
-            whoblocks()
+                x = x + 1
         else:
-            print "That's not even a thing"
-            whoblocks()
-    elif choice.upper() == "N":
-        p1.life = p1.life - int(ms[x])
-        print "LP: ", p1.life
+            choice = raw_input("Will you block? Y or N\n")
+            if choice.upper() == "Y":
+                print p1.blockers
+                y = raw_input("Who will you block with?\n")
+                if y in p1.blockers:
+                    if y > ms[x]:
+                        z = p2.field.index(ms[x])
+                        c = p2.field.pop(z)
+                        p2.dpile.append(c)
+                        print "OP's monster was destroyed"
+                    elif ms[x] > y:
+                        z = p1.field.index(y)
+                        c = p1.field.pop(z)
+                        p1.dpile.append(c)
+                        print "Your ", y, " was destroyed"
+                    else:
+                        z = p2.field.index(ms[x])
+                        c = p2.field.pop(z)
+                        p2.dpile.append(c)
+                        h = p1.field.index(y)
+                        g = p1.field.pop(h)
+                        p1.dpile.append(g)
+                        print "It's a draw, both creatures were destroyed"
 
+                elif y in p1.field:
+                    print "You can't block with that"
+                    whoblocks()
+                else:
+                    print "That's not even a thing"
+                    whoblocks()
+            elif choice.upper() == "N":
+                p1.life = p1.life - int(ms[x])
+                print "LP: ", p1.life
+                if p1.life <= 0:
+                    print "Game Over"
+                    exit()
+                else:
+                    break
 
-    else:
-        print "That's not even a thing"
-        whoblocks()
+            else:
+                print "That's not even a thing"
+                whoblocks()
+            x = x + 1
+
 
 def opland():
     x = 0
@@ -207,17 +225,8 @@ def opsummon():
         print "End of OP's turn"
         plturn()
     else:
-        print "Attack Phase"
-        x = 0
-        while x < len(ms):
-            print "A", ms[x], "is attacking you."
-            if not p1.blockers:
-                p1.life = p1.life - int(ms[x])
-                print "LP: ", p1.life
-                x = x + 1
-            else:
-                whoblocks()
-                x = x + 1
+        whoblocks()
+
 
 def plturn():
     global mana
